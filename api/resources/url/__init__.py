@@ -77,7 +77,17 @@ class Url(Resource):
                 Database().execute_with_commit(query)
 
             except DuplicatedEntryError as e:
-                if 'for key \'name\'' in str(e): raise e
+                if 'for key \'name\'' in str(e):
+                    shortUrl, expireAt = Database().execute_with_return(
+                        f'select short_name, expire_at from urls where name=\'{data["URLName"]}\''
+                    )[0]
+                    
+                    return {
+                        'response': 'Esta URL já possui uma versão encurtada!',
+                        'shortUrl': shortUrl,
+                        'expireAt': datetime.strftime(expireAt, '%d-%m-%Y %H:%M:%S')
+                    }, 303
+                    
                 data['requestedName'] = None
             else:
                 break

@@ -5,13 +5,9 @@ from werkzeug.exceptions import NotFound
 
 from resources import Url
 
-import json
-
-
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-
 
 @app.route('/<short_url>')
 def redirect_to_short_url(short_url):
@@ -21,6 +17,6 @@ def redirect_to_short_url(short_url):
         Url()._get(short_url)['URLName']
     )
 
-api.add_resource(Url, '/url')
+api.add_resource(Url, '/urls')
 
-app.run(debug=True)
+app.run(debug=False)
