@@ -9,8 +9,6 @@ from commons.errors import DuplicatedEntryError
 from os import path
 from datetime import datetime
 
-import json
-
 class Url(Resource):
     def __init__(self):
         self.header = [
