@@ -1,6 +1,8 @@
 from flask import request
 from flask_restful import Resource
+from werkzeug.exceptions import NotFound
 from modules.db.mysql import Database
+from commons import validate_short_url
 
 from os import path
 from datetime import datetime
@@ -34,6 +36,9 @@ class Url(Resource):
         )
         response = Database().execute_with_return(query, True, self.header)
         
+        if not response: raise NotFound
+        response = validate_short_url(response[0])
+        
         return response
         
     
@@ -55,10 +60,8 @@ class Url(Resource):
             ),parameters
         )
         
-        print(query)
-        
         Database().execute_with_commit(query)
         
         return {
             'response': 'Endpoint criado com sucesso'
-            }, 200
+            }, 201

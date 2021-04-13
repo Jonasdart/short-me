@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_cors import CORS
 from flask_restful import Api
 from werkzeug.exceptions import NotFound
@@ -17,8 +17,8 @@ api = Api(app)
 def redirect_to_short_url(short_url):
     if short_url == 'favicon.ico': raise NotFound
     
-    return json.dumps(
-        Url()._get(short_url), indent=2
+    return redirect(
+        Url()._get(short_url)['URLName']
     )
 
 api.add_resource(Url, '/url')
