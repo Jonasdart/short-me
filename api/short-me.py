@@ -13,8 +13,15 @@ api = Api(app)
 def redirect_to_short_url(short_url):
     if short_url == 'favicon.ico': raise NotFound
     
+    try:
+        URLName = Url()._get(short_url)['URLName']
+    except AssertionError:
+        return {
+            'response': 'URL inválida!'
+        }, 401
+        
     return redirect(
-        Url()._get(short_url)['URLName']
+        URLName
     )
 
 api.add_resource(Url, '/urls')

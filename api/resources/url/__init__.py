@@ -32,6 +32,8 @@ class Url(Resource):
         
     @ApiCache(expired_time=10)
     def _get(self, url):
+        validate_url(url, prefix=False)
+        
         query = Database().parameters_parse(
             path.join(
                 'api', 'commons', 'queries', 'get_full_url.sql'
@@ -39,11 +41,14 @@ class Url(Resource):
                 'shortName': url
             }
         )
+        
+        
         response = Database().execute_with_return(query, True, self.header)
         
         if not response: raise NotFound
         response = validate_short_url(response[0])
-        
+    
+                
         return response
         
     
