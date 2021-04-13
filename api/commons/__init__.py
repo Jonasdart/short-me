@@ -16,10 +16,7 @@ def new_short_url(url):
     return __hash
 
 
-def validate_url(url, prefix=True):
-    if prefix: 
-        assert ('https://' or 'http://') in url[:8]
-        
+def validate_url(url):
     assert isinstance(url, str)
     assert ' ' not in url
     

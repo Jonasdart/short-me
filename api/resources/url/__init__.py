@@ -30,7 +30,7 @@ class Url(Resource):
         
     @ApiCache(expired_time=10)
     def _get(self, url):
-        validate_url(url, prefix=False)
+        validate_url(url)
         
         query = Database().parameters_parse(
             path.join(
@@ -61,12 +61,13 @@ class Url(Resource):
                     'requested_name': data.get('requestedName'),
                 }
             
+            parameters['column_expire_at'] = ''
+            parameters['value_expire_at'] = ''
+            
             if data.get('dateOfExpire'):
-                parameters['column_expire_at'] = ', expire_at'
-                parameters['value_expire_at'] = f', \'{data.get("dateOfExpire")}\''
-            else:
-                parameters['column_expire_at'] = ''
-                parameters['value_expire_at'] = ''
+                if datetime.strptime(data['dateOfExpire'], '%Y-%m-%d %H:%M:%S') >= datetime.now():
+                    parameters['column_expire_at'] = ', expire_at'
+                    parameters['value_expire_at'] = f', \'{data.get("dateOfExpire")}\''
             
             while True:
                 try:
@@ -102,8 +103,13 @@ class Url(Resource):
             return {
                 'response': 'Verifique os parâmetros!'
             }, 401
-                
+        
+        shortUrl, expireAt = Database().execute_with_return(
+                f'select short_name, expire_at from urls where name=\'{data["URLName"]}\''
+            )[0]
+        
         return {
             'response': 'Endpoint criado com sucesso',
-            'shortURL': parameters['short_name']
+            'shortURL': shortUrl,
+            'expireAt': datetime.strftime(expireAt, '%d-%m-%Y %H:%M:%S')
             }, 201
