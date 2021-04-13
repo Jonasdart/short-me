@@ -1,15 +1,17 @@
 import random
+import string
 from datetime import datetime
 
 from werkzeug.exceptions import NotFound
 
 
 def new_short_url(url):
-    __hash = str(random.getrandbits(len(url)))
-    __hash = __hash[:5]
+    letters = string.ascii_letters
     
-    __hash += url.split('://')[1][:1]
-    __hash += str(random.getrandbits(6))
+    __hash = ''.join(random.choice(letters) for _ in range(random.randint(0, 3)))
+    __hash += str(random.getrandbits(len(url)))
+    __hash = __hash[:5]
+    __hash += ''.join(random.choice(letters) for _ in range(random.randint(0, 3)))
     
     return __hash
 
