@@ -2,7 +2,8 @@ from flask import request
 from flask_restful import Resource
 from werkzeug.exceptions import NotFound
 from modules.db.mysql import Database
-from commons import validate_short_url
+from commons import validate_short_url, new_short_url
+from commons.errors import DuplicatedEntryError
 
 from os import path
 from datetime import datetime
@@ -22,7 +23,7 @@ class Url(Resource):
             raise
         
         return {
-            'response': dbReturn
+            'URLs': dbReturn
             }, 200
         
     
@@ -48,20 +49,29 @@ class Url(Resource):
         parameters = {
                 'name': data['URLName'],
                 'requested_name': data.get('requestedName'),
-                'short_name': 'teste'
             }
         
         if data.get('dateOfExpire'):
             parameters['expire_at'] = data.get('dateOfExpire')
         
-        query = Database().parameters_parse(
-            path.join(
-                'api', 'commons', 'queries', 'new_short_url.sql'
-            ),parameters
-        )
-        
-        Database().execute_with_commit(query)
-        
+        while True:
+            try:
+                parameters['short_name'] = new_short_url(data['URLName'])
+            
+                query = Database().parameters_parse(
+                    path.join(
+                        'api', 'commons', 'queries', 'new_short_url.sql'
+                    ),parameters
+                )
+            
+                Database().execute_with_commit(query)
+
+            except DuplicatedEntryError as e:
+                if 'for key \'name\'' in str(e): raise e
+                pass
+            else:
+                break
+            
         return {
             'response': 'Endpoint criado com sucesso'
             }, 201

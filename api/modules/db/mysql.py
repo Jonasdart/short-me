@@ -182,8 +182,6 @@ class Database():
         :param query: string contendo o caminho do arquivo da query
         :param parameters: [Opcional] dicionário contendo os parâmetros que serão feitos replace.
         """
-        
-        print(parameters)
         try:
             with open(query, 'r') as sql:
                 query = " ".join(sql.read().split())
