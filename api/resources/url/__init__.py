@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+from flask_api_cache import ApiCache
 from werkzeug.exceptions import NotFound
 from modules.db.mysql import Database
 from commons import validate_short_url, new_short_url
@@ -16,6 +17,8 @@ class Url(Resource):
             'URLName', 'requestedName', 'shortName', 'createdAt', 'expireAt'
         ]
         
+        
+    @ApiCache(expired_time=10)
     def get(self):        
         try:
             dbReturn = Database().execute_with_return('select * from urls', True, self.header)
@@ -26,7 +29,8 @@ class Url(Resource):
             'URLs': dbReturn
             }, 200
         
-    
+        
+    @ApiCache(expired_time=10)
     def _get(self, url):
         query = Database().parameters_parse(
             path.join(
@@ -52,26 +56,33 @@ class Url(Resource):
             }
         
         if data.get('dateOfExpire'):
-            parameters['expire_at'] = data.get('dateOfExpire')
+            parameters['column_expire_at'] = ', expire_at'
+            parameters['value_expire_at'] = f', \'{data.get("dateOfExpire")}\''
+        else:
+            parameters['column_expire_at'] = ''
+            parameters['value_expire_at'] = ''
         
         while True:
             try:
-                parameters['short_name'] = new_short_url(data['URLName'])
+                if not data.get('requestedName'):
+                    parameters['short_name'] = new_short_url(data['URLName'])
+                else:
+                    parameters['short_name'] = '-'.join(data['requestedName'].lower().split(' '))
             
                 query = Database().parameters_parse(
                     path.join(
                         'api', 'commons', 'queries', 'new_short_url.sql'
                     ),parameters
                 )
-            
                 Database().execute_with_commit(query)
 
             except DuplicatedEntryError as e:
                 if 'for key \'name\'' in str(e): raise e
-                pass
+                data['requestedName'] = None
             else:
                 break
             
         return {
-            'response': 'Endpoint criado com sucesso'
+            'response': 'Endpoint criado com sucesso',
+            'shortURL': parameters['short_name']
             }, 201
