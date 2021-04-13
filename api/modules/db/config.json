@@ -1,9 +1,0 @@
-{
-    "oracle" : {
-        "minPool"  : 500,
-        "maxPool"  : 1000,
-        "increment": 10,
-        "threaded" : false
-    }
-    
-}
