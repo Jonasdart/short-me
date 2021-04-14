@@ -1,0 +1,28 @@
+.menu-bar {
+    width: 500px;
+    padding-right: 14px;
+    margin: 0 auto;
+}
+.menu-bar button {
+    width: 500px;
+    padding-right: 14px;
+    margin: 0 auto;
+    margin-top: 2%;
+}
+
+.user-session {
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 90%;
+}
+
+#body {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+}
+
+#user-register-form {
+    text-align: center;
+}
+#user-login-form {
+    text-align: center;
+}

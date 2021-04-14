@@ -1,0 +1,22 @@
+{% extends '/base.html' %}
+
+<head>
+  {% block title %}Novo Usuário{% endblock %}
+</head>
+
+{% block content %}
+  <div id="user-register-form">
+    <h2>Novo usuário</h1>
+    <form method="post">
+      <label for="username">Usuario</label>
+      <p>
+      <input name="username" id="username" required>
+      <p>
+      <label for="password">Senha</label>
+      <p>
+      <input type="password" name="password" id="password">
+      <p>
+      <button>Cadastrar</button>
+    </form>
+  </div>
+{% endblock %}
