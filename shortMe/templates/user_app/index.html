@@ -3,18 +3,18 @@
 {% block title %}Duzz System{% endblock %}
 
 {% block header %}
-  <div class="menu-bar">
-    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-      <div class="btn-group mr-2" role="group" aria-label="One group">
-        <button type="button" class="btn btn-info">Nova URL</button>
-      </div>
-      <div class="btn-group mr-2" role="group" aria-label="Two group">
-        <button type="button" class="btn btn-light">Ver URLS</button>
-      </div>
-    </div>
-  </div>
 {%endblock%}
 
 {% block content %}
+  <div class="menu-bar">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group mr-2" role="group" aria-label="One group">
+        <a href="{{url_for('user_app.create')}}"><input type="button" value="Nova URL"></a>
+      </div>
+      <div class="btn-group mr-2" role="group" aria-label="Two group">
+        <a href="{{url_for('user_app.view')}}"><input type="button" value="Ver URLS"></a>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

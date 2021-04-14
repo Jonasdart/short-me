@@ -1,14 +1,11 @@
 .menu-bar {
-    width: 500px;
-    padding-right: 14px;
-    margin: 0 auto;
+    margin: auto;
 }
-.menu-bar button {
+.menu-bar input {
     width: 500px;
-    padding-right: 14px;
-    margin: 0 auto;
-    margin-top: 2%;
+    padding-bottom: 5px;
 }
+
 
 .user-session {
     position: absolute;
@@ -17,7 +14,8 @@
 }
 
 #body {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 10% 25% 10% 25%;
 }
 
 #user-register-form {
@@ -25,4 +23,13 @@
 }
 #user-login-form {
     text-align: center;
+}
+@media only screen and (max-width: 959px) {
+    .menu-bar input{
+        width: 100px;
+    }
+
+    .logo {
+        width: 100px;
+    }
 }

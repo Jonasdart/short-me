@@ -37,10 +37,12 @@ https://templatemo.com/tm-529-ramayana
           </div>
           <ul class="user-session">
               {% if g.user %}
-                <li><span>{{ g.user['nome'] }}</span>
+                <li><span>{{ g.user['username'] }}</span>
                 <li><a href="{{ url_for('auth.logout') }}">Sair</a>
               {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Entrar</a>
+                <p>
+                <li><a href="{{ url_for('auth.register') }}">Registrar</a>
               {% endif %}
             </ul>
         </header>
