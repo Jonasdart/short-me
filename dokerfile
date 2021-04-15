@@ -1,0 +1,31 @@
+#Primeiro estagio (libs do Mysql)
+FROM ubuntu AS mysql_client_builder
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update \
+&& apt-get install -y \
+python3-dev default-libmysqlclient-dev build-essential \
+
+
+#segundo estagio (libs do Python)
+FROM python:3.8-slim AS python_builder
+
+COPY ./requirements.txt ./requirements.txt
+
+RUN python3.8 -m pip install --upgrade pip \
+&& pip3.8 install --user -r requirements.txt
+
+#Terceiro estagio (imagem)
+FROM python:3.8-slim
+WORKDIR /app
+
+COPY ./api/ ./
+
+ENV DB_USER root
+ENV DB_PASS  
+ENV DB_HOST localhost
+ENV DB_PORT 3306
+ENV DB_NAME short-me-api
+
+CMD ["python3.8", "short-me.py"]

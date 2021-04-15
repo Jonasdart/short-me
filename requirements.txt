@@ -1,0 +1,5 @@
+pip install flask
+pip install flask_cors
+pip install flask_api_cache
+pip install flask_restful
+pip install mysqlclient
